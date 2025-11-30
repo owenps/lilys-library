@@ -51,8 +51,8 @@ export function LoginPage() {
       {/* Login Card */}
       <Card className="relative z-10 w-full max-w-md bg-background/95 backdrop-blur-sm shadow-2xl">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-            <BookOpen className="h-8 w-8 text-primary" />
+          <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-sm shadow-orange-400/15">
+            <BookOpen className="h-8 w-8 text-white" />
           </div>
           <div>
             <CardTitle className="text-2xl">Lily's Library</CardTitle>

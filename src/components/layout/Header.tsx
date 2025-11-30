@@ -37,8 +37,10 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-primary" />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="relative flex items-center justify-center h-9 w-9 rounded-xl bg-gradient-to-br from-primary/80 to-primary shadow-sm shadow-primary/15 group-hover:scale-105 transition-transform duration-200">
+              <BookOpen className="h-5 w-5 text-primary-foreground" />
+            </div>
             <span className="text-xl font-semibold tracking-tight">Lily's Library</span>
           </Link>
 
