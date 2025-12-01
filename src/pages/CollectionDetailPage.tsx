@@ -565,7 +565,7 @@ export function CollectionDetailPage() {
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Collection</AlertDialogTitle>
+            <AlertDialogTitle className="text-destructive">Delete Collection</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete "{collection.name}"? The books in
               this collection will not be deleted.
@@ -575,7 +575,7 @@ export function CollectionDetailPage() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="border bg-background shadow-xs hover:bg-accent text-destructive hover:text-destructive"
             >
               Delete
             </AlertDialogAction>

@@ -313,7 +313,7 @@ export function BookDetailPage() {
 
       <div className="grid gap-6 md:grid-cols-[300px_1fr]">
         {/* Book Cover & Quick Actions */}
-        <div className="space-y-4">
+        <div className="space-y-4 max-w-[200px] mx-auto md:max-w-none md:mx-0">
           <div className="aspect-[2/3] rounded-lg overflow-hidden bg-muted shadow-lg">
             {book.cover_url ? (
               <img
@@ -388,7 +388,7 @@ export function BookDetailPage() {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Delete Book</AlertDialogTitle>
+                  <AlertDialogTitle className="text-destructive">Delete Book</AlertDialogTitle>
                   <AlertDialogDescription>
                     Are you sure you want to remove "{book.title}" from your
                     library? This action cannot be undone.
@@ -398,7 +398,7 @@ export function BookDetailPage() {
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeleteBook}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    className="border bg-background shadow-xs hover:bg-accent text-destructive hover:text-destructive"
                   >
                     Delete
                   </AlertDialogAction>
@@ -411,20 +411,17 @@ export function BookDetailPage() {
         {/* Book Details & Tabs */}
         <div className="space-y-6">
           <div>
-            <Badge className={cn("mb-2 gap-1", statusInfo.className)}>
+            <Badge className={cn("mb-1 gap-1", statusInfo.className)}>
               <StatusIcon className="h-3 w-3" />
               {statusInfo.label}
             </Badge>
-            <h1 className="text-3xl font-bold tracking-tight">{book.title}</h1>
-            <p className="text-xl text-muted-foreground mt-1">{book.author}</p>
+            <h1 className="text-2xl font-bold tracking-tight">{book.title}</h1>
+            <p className="text-base text-muted-foreground">
+              {book.author}
+              {book.published_year && <span className="ml-2">· {book.published_year}</span>}
+            </p>
 
-            <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-muted-foreground">
-              {book.published_year && (
-                <span className="flex items-center gap-1">
-                  <CalendarIcon className="h-4 w-4" />
-                  {book.published_year}
-                </span>
-              )}
+            <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-muted-foreground">
               {book.page_count && (
                 <span className="flex items-center gap-1">
                   <FileText className="h-4 w-4" />
@@ -745,7 +742,7 @@ export function BookDetailPage() {
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                       <AlertDialogHeader>
-                                        <AlertDialogTitle>
+                                        <AlertDialogTitle className="text-destructive">
                                           Delete Reading Session
                                         </AlertDialogTitle>
                                         <AlertDialogDescription>
@@ -776,7 +773,7 @@ export function BookDetailPage() {
                                               isCurrent,
                                             )
                                           }
-                                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                          className="border bg-background shadow-xs hover:bg-accent text-destructive hover:text-destructive"
                                         >
                                           Delete
                                         </AlertDialogAction>

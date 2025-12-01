@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Mail, Calendar, BookOpen, CheckCircle, Clock, Heart } from "lucide-react";
+import {
+  Mail,
+  Calendar,
+  BookOpen,
+  CheckCircle,
+  Clock,
+  Heart,
+  Quote,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -13,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBooks, useWishlistBooks } from "@/hooks/useBooks";
+import { useRandomQuote } from "@/hooks/useRandomQuote";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
@@ -21,9 +30,10 @@ export function ProfilePage() {
   const { user } = useAuth();
   const { books } = useBooks();
   const { books: wishlistBooks } = useWishlistBooks();
+  const { quote } = useRandomQuote();
 
   const [displayName, setDisplayName] = useState(
-    user?.user_metadata?.full_name || user?.user_metadata?.name || ""
+    user?.user_metadata?.full_name || user?.user_metadata?.name || "",
   );
   const [isSaving, setIsSaving] = useState(false);
 
@@ -31,7 +41,8 @@ export function ProfilePage() {
     total: books.length,
     completed: books.filter((b) => b.user_book?.status === "completed").length,
     reading: books.filter((b) => b.user_book?.status === "reading").length,
-    wantToRead: books.filter((b) => b.user_book?.status === "want_to_read").length,
+    wantToRead: books.filter((b) => b.user_book?.status === "want_to_read")
+      .length,
     wishlist: wishlistBooks.length,
   };
 
@@ -66,29 +77,25 @@ export function ProfilePage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-        <p className="text-muted-foreground">
-          Manage your account and view your reading stats
-        </p>
+        <p className="text-muted-foreground">Manage your account</p>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Account</CardTitle>
-          <CardDescription>Your account information</CardDescription>
-        </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
             <Avatar className="h-20 w-20">
               <AvatarImage
-                src={user.user_metadata?.avatar_url || user.user_metadata?.picture}
+                src={
+                  user.user_metadata?.avatar_url || user.user_metadata?.picture
+                }
                 alt={displayName}
               />
-              <AvatarFallback className="text-lg">{getInitials()}</AvatarFallback>
+              <AvatarFallback className="text-lg">
+                {getInitials()}
+              </AvatarFallback>
             </Avatar>
             <div className="space-y-1">
-              <p className="font-medium text-lg">
-                {displayName || "Reader"}
-              </p>
+              <p className="font-medium text-lg">{displayName || "Reader"}</p>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
                 <Mail className="h-3 w-3" />
                 {user.email}
@@ -116,6 +123,26 @@ export function ProfilePage() {
           </div>
         </CardContent>
       </Card>
+
+      {quote && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Quote className="h-5 w-5" />
+              Random Quote
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <blockquote className="border-l-2 border-primary pl-4 italic text-muted-foreground">
+              "{quote.content}"
+            </blockquote>
+            <p className="text-sm text-muted-foreground mt-3">
+              — <span className="font-medium text-foreground">{quote.book.title}</span> by {quote.book.author}
+              {quote.page_number && <span className="ml-1">· p. {quote.page_number}</span>}
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

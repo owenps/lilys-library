@@ -1,34 +1,63 @@
-import { Link } from 'react-router-dom'
-import { Star, BookOpen, CheckCircle, Clock, Heart, ChevronRight } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { cn } from '@/lib/utils'
-import type { BookWithDetails, ReadingStatus } from '@/types/database'
+import { Link } from "react-router-dom";
+import {
+  Star,
+  BookOpen,
+  CheckCircle,
+  Clock,
+  Heart,
+  ChevronRight,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
+import type { BookWithDetails, ReadingStatus } from "@/types/database";
 
 interface BookListProps {
-  books: BookWithDetails[]
+  books: BookWithDetails[];
 }
 
-const statusConfig: Record<ReadingStatus, { label: string; icon: typeof BookOpen; className: string }> = {
-  reading: { label: 'Reading', icon: BookOpen, className: 'bg-blue-500/10 text-blue-500' },
-  completed: { label: 'Completed', icon: CheckCircle, className: 'bg-green-500/10 text-green-500' },
-  want_to_read: { label: 'Want to Read', icon: Clock, className: 'bg-orange-500/10 text-orange-500' },
-  wishlist: { label: 'Wishlist', icon: Heart, className: 'bg-pink-500/10 text-pink-500' },
-}
+const statusConfig: Record<
+  ReadingStatus,
+  { label: string; icon: typeof BookOpen; className: string }
+> = {
+  reading: {
+    label: "Reading",
+    icon: BookOpen,
+    className: "bg-blue-500/10 text-blue-500",
+  },
+  completed: {
+    label: "Completed",
+    icon: CheckCircle,
+    className: "bg-green-500/10 text-green-500",
+  },
+  want_to_read: {
+    label: "Want to Read",
+    icon: Clock,
+    className: "bg-orange-500/10 text-orange-500",
+  },
+  wishlist: {
+    label: "Wishlist",
+    icon: Heart,
+    className: "bg-pink-500/10 text-pink-500",
+  },
+};
 
 export function BookList({ books }: BookListProps) {
   return (
     <div className="space-y-2">
       {books.map((book) => {
-        const status = book.user_book?.status || 'want_to_read'
-        const statusInfo = statusConfig[status]
-        const StatusIcon = statusInfo.icon
-        const progress = book.page_count && book.user_book?.current_page
-          ? Math.round((book.user_book.current_page / book.page_count) * 100)
-          : 0
+        const status = book.user_book?.status || "want_to_read";
+        const statusInfo = statusConfig[status];
+        const StatusIcon = statusInfo.icon;
+        const progress =
+          book.page_count && book.user_book?.current_page
+            ? Math.round((book.user_book.current_page / book.page_count) * 100)
+            : 0;
 
         // Get latest rating from reading sessions (sorted by read_number desc)
-        const latestRating = book.reading_sessions?.find((s) => s.rating)?.rating
+        const latestRating = book.reading_sessions?.find(
+          (s) => s.rating,
+        )?.rating;
 
         return (
           <Link
@@ -60,7 +89,9 @@ export function BookList({ books }: BookListProps) {
                     {book.author}
                   </p>
                 </div>
-                <Badge className={cn('flex-shrink-0 gap-1', statusInfo.className)}>
+                <Badge
+                  className={cn("flex-shrink-0 gap-1", statusInfo.className)}
+                >
                   <StatusIcon className="h-3 w-3" />
                   <span className="hidden sm:inline">{statusInfo.label}</span>
                 </Badge>
@@ -73,17 +104,17 @@ export function BookList({ books }: BookListProps) {
                       <Star
                         key={i}
                         className={cn(
-                          'h-3 w-3',
+                          "h-3 w-3",
                           i < latestRating
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'text-muted-foreground/30'
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-muted-foreground/30",
                         )}
                       />
                     ))}
                   </div>
                 )}
 
-                {status === 'reading' && book.page_count && (
+                {status === "reading" && book.page_count && (
                   <div className="flex items-center gap-2 flex-1 max-w-xs">
                     <Progress value={progress} className="h-1.5" />
                     <span className="text-xs text-muted-foreground whitespace-nowrap">
@@ -102,8 +133,8 @@ export function BookList({ books }: BookListProps) {
 
             <ChevronRight className="h-5 w-5 text-muted-foreground/50 group-hover:text-primary transition-colors" />
           </Link>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
