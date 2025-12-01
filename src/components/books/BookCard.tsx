@@ -78,9 +78,9 @@ export function BookCard({ book }: BookCardProps) {
           <p className="text-sm text-muted-foreground line-clamp-1">
             {book.author}
           </p>
-          {latestRating && (
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
+          <div className="flex items-center gap-1 h-4">
+            {latestRating &&
+              Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}
                   className={cn(
@@ -91,8 +91,7 @@ export function BookCard({ book }: BookCardProps) {
                   )}
                 />
               ))}
-            </div>
-          )}
+          </div>
           {status === "reading" && book.page_count && (
             <div className="space-y-1">
               <Progress value={progress} className="h-1.5" />
