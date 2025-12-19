@@ -69,7 +69,9 @@ export function LoginPage() {
             <BookOpen className="h-8 w-8 text-white" />
           </div>
           <div>
-            <CardTitle className="text-3xl italic text-white">Lily's Library</CardTitle>
+            <CardTitle className="text-3xl italic text-white">
+              Lily's Library
+            </CardTitle>
             <CardDescription className="mt-2 text-white/80">
               Your personal reading diary. Track your books, capture thoughts,
               and watch your library grow.
