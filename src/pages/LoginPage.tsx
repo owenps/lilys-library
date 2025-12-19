@@ -11,7 +11,13 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 
 // Theme classes to remove for default look
-const themeClasses = ["espresso", "cappuccino", "spicy-chai", "matcha", "london-fog"];
+const themeClasses = [
+  "espresso",
+  "cappuccino",
+  "spicy-chai",
+  "matcha",
+  "london-fog",
+];
 
 export function LoginPage() {
   const { signInWithGoogle } = useAuth();
@@ -21,7 +27,9 @@ export function LoginPage() {
     const root = document.documentElement;
 
     // Store which theme classes were active
-    const activeClasses = themeClasses.filter((cls) => root.classList.contains(cls));
+    const activeClasses = themeClasses.filter((cls) =>
+      root.classList.contains(cls),
+    );
 
     // Remove all theme classes for default appearance
     activeClasses.forEach((cls) => root.classList.remove(cls));
@@ -34,29 +42,35 @@ export function LoginPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
+      {/* Background Image */}
+      <img
+        src="/login-bg.jpeg"
+        alt="Reader"
         className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/login-bg.mp4" type="video/mp4" />
-      </video>
+      />
 
       {/* Overlay for better readability */}
-      <div className="absolute inset-0 bg-black/2" />
+      <div className="absolute inset-0 bg-black/20" />
+
+      {/* Artist Credit */}
+      <a
+        href="https://www.instagram.com/bonjoursimonleclerc/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-3 right-3 z-20 text-xs text-white/70 hover:text-white transition-colors"
+      >
+        Art by @bonjoursimonleclerc
+      </a>
 
       {/* Login Card */}
-      <Card className="relative z-10 w-full max-w-md bg-background/95 backdrop-blur-sm shadow-2xl">
+      <Card className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-16 h-16 bg-gradient-to-br from-orange-300 to-orange-400 rounded-2xl flex items-center justify-center shadow-sm shadow-orange-400/15">
             <BookOpen className="h-8 w-8 text-white" />
           </div>
           <div>
-            <CardTitle className="text-2xl">Lily's Library</CardTitle>
-            <CardDescription className="mt-2">
+            <CardTitle className="text-3xl italic text-white">Lily's Library</CardTitle>
+            <CardDescription className="mt-2 text-white/80">
               Your personal reading diary. Track your books, capture thoughts,
               and watch your library grow.
             </CardDescription>
@@ -66,7 +80,7 @@ export function LoginPage() {
           <Button
             onClick={signInWithGoogle}
             variant="outline"
-            className="w-full h-12 gap-3 hover:bg-orange-50 hover:border-orange-200"
+            className="w-full h-12 gap-3 bg-white/90 hover:bg-white border-white/50"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -88,7 +102,7 @@ export function LoginPage() {
             </svg>
             Continue with Google
           </Button>
-          <p className="text-xs text-center text-muted-foreground">
+          <p className="text-xs text-center text-white/60">
             By continuing, you agree to use this app responsibly and have fun
             tracking your reading.
           </p>
