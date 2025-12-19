@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Search, Plus, BookOpen, Loader2 } from 'lucide-react'
+import { Search, Plus, BookOpen, Loader2, Star } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -48,6 +49,8 @@ export function AddBookPage() {
   const [description, setDescription] = useState('')
   const [publishedYear, setPublishedYear] = useState('')
   const [status, setStatus] = useState<ReadingStatus>(initialStatus)
+  const [rating, setRating] = useState(0)
+  const [hoverRating, setHoverRating] = useState(0)
 
   // Update status if URL param changes
   useEffect(() => {
@@ -115,6 +118,7 @@ export function AddBookPage() {
         description: description.trim() || undefined,
         published_year: publishedYear ? parseInt(publishedYear) : undefined,
         status,
+        rating: status === 'completed' ? rating || undefined : undefined,
       })
 
       toast.success(status === 'wishlist' ? 'Book added to your wishlist!' : 'Book added to your library!')
@@ -326,6 +330,42 @@ export function AddBookPage() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {status === 'completed' && (
+                <div className="space-y-2">
+                  <Label>Rating</Label>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setRating(i + 1)}
+                        onMouseEnter={() => setHoverRating(i + 1)}
+                        onMouseLeave={() => setHoverRating(0)}
+                        className="p-0.5 transition-transform hover:scale-110"
+                      >
+                        <Star
+                          className={cn(
+                            'h-6 w-6 transition-colors',
+                            i < (hoverRating || rating)
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'text-muted-foreground/30'
+                          )}
+                        />
+                      </button>
+                    ))}
+                    {rating > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setRating(0)}
+                        className="ml-2 text-xs text-muted-foreground hover:text-foreground"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="flex gap-2 pt-4">
                 <Button type="submit" disabled={createBook.isPending}>

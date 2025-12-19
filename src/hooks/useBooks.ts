@@ -133,6 +133,7 @@ interface CreateBookInput {
   description?: string
   published_year?: number
   status: ReadingStatus
+  rating?: number
 }
 
 export function useCreateBook() {
@@ -143,7 +144,7 @@ export function useCreateBook() {
     mutationFn: async (input: CreateBookInput) => {
       if (!user) throw new Error('Not authenticated')
 
-      const { status, ...bookData } = input
+      const { status, rating, ...bookData } = input
 
       // Auto-extract spine color if cover_url provided and spine_color not set
       let spineColor = bookData.spine_color
@@ -175,16 +176,18 @@ export function useCreateBook() {
           user_id: user.id,
           book_id: book.id,
           status,
-          current_page: 0,
-          started_at: status === 'reading' ? new Date().toISOString() : null,
+          current_page: status === 'completed' ? (bookData.page_count || 0) : 0,
+          started_at: status === 'reading' || status === 'completed' ? new Date().toISOString() : null,
+          finished_at: status === 'completed' ? new Date().toISOString() : null,
+          rating: status === 'completed' ? rating : null,
         })
         .select()
         .single()
 
       if (userBookError) throw userBookError
 
-      // Create initial reading session if status is 'reading'
-      if (status === 'reading') {
+      // Create reading session if status is 'reading' or 'completed'
+      if (status === 'reading' || status === 'completed') {
         const { data: session, error: sessionError } = await supabase
           .from('reading_sessions')
           .insert({
@@ -193,6 +196,8 @@ export function useCreateBook() {
             user_book_id: userBook.id,
             read_number: 1,
             started_at: new Date().toISOString(),
+            finished_at: status === 'completed' ? new Date().toISOString() : null,
+            rating: status === 'completed' ? rating : null,
           })
           .select()
           .single()
