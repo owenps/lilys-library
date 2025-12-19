@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Search, Grid3X3, List, BookOpen, Filter, Users } from 'lucide-react'
+import { Plus, Search, Grid3X3, List, Filter, Users, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -11,17 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { BookGrid } from '@/components/books/BookGrid'
 import { BookList } from '@/components/books/BookList'
 import { BookshelfView } from '@/components/books/BookshelfView'
 import { AuthorsView } from '@/components/books/AuthorsView'
 import { useBooks } from '@/hooks/useBooks'
 import type { ReadingStatus } from '@/types/database'
 
-type ViewMode = 'grid' | 'list' | 'shelf' | 'authors'
+type ViewMode = 'list' | 'shelf' | 'authors'
 
 export function LibraryPage() {
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [viewMode, setViewMode] = useState<ViewMode>('shelf')
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<ReadingStatus | 'all'>('all')
   const { books, isLoading } = useBooks()
@@ -92,14 +91,11 @@ export function LibraryPage() {
 
           <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as ViewMode)}>
             <TabsList>
-              <TabsTrigger value="grid" className="px-3">
+              <TabsTrigger value="shelf" className="px-3">
                 <Grid3X3 className="h-4 w-4" />
               </TabsTrigger>
               <TabsTrigger value="list" className="px-3">
                 <List className="h-4 w-4" />
-              </TabsTrigger>
-              <TabsTrigger value="shelf" className="px-3">
-                <BookOpen className="h-4 w-4" />
               </TabsTrigger>
               <TabsTrigger value="authors" className="px-3">
                 <Users className="h-4 w-4" />
@@ -133,8 +129,6 @@ export function LibraryPage() {
         </div>
       ) : viewMode === 'authors' ? (
         <AuthorsView books={filteredBooks} />
-      ) : viewMode === 'grid' ? (
-        <BookGrid books={filteredBooks} />
       ) : viewMode === 'list' ? (
         <BookList books={filteredBooks} />
       ) : (
