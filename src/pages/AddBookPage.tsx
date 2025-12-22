@@ -301,9 +301,12 @@ export function AddBookPage() {
                 <Input
                   id="coverUrl"
                   value={coverUrl}
-                  onChange={(e) => setCoverUrl(e.target.value)}
+                  onChange={(e) => setCoverUrl(e.target.value.trim())}
                   placeholder="https://..."
                 />
+                <p className="text-xs text-muted-foreground">
+                  Tip: Upload to <a href="https://imgur.com/upload" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Imgur</a>, then right-click the image and "Copy image address"
+                </p>
               </div>
 
               <div className="space-y-2">

@@ -1,6 +1,5 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import { TextureLoader } from "three";
 import * as THREE from "three";
 import {
   hashStringToColor,
@@ -83,16 +82,40 @@ function BookMesh({ book, position, onClick }: Book3DProps) {
   const isBright = isColorBright(spineColor);
   const textColor = isBright ? "#1f2937" : "#ffffff";
 
-  // Load cover texture or create placeholder
-  const coverTexture = useMemo(() => {
-    if (book.cover_url) {
-      const loader = new TextureLoader();
-      const texture = loader.load(book.cover_url);
-      texture.colorSpace = THREE.SRGBColorSpace;
-      return texture;
-    }
+  // Placeholder texture (memoized)
+  const placeholderTexture = useMemo(() => {
     return createPlaceholderTexture(spineColor, book.title);
-  }, [book.cover_url, spineColor, book.title]);
+  }, [spineColor, book.title]);
+
+  // Load cover texture with error handling
+  const [coverTexture, setCoverTexture] = useState<THREE.Texture>(placeholderTexture);
+
+  useEffect(() => {
+    if (!book.cover_url) {
+      setCoverTexture(placeholderTexture);
+      return;
+    }
+
+    // Load image manually to have better control over CORS
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+
+    img.onload = () => {
+      const texture = new THREE.Texture(img);
+      texture.needsUpdate = true;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      setCoverTexture(texture);
+    };
+
+    img.onerror = () => {
+      console.warn("Failed to load cover image:", book.cover_url);
+      setCoverTexture(placeholderTexture);
+    };
+
+    // Add cache buster to avoid CORS issues with cached responses
+    const separator = book.cover_url.includes("?") ? "&" : "?";
+    img.src = `${book.cover_url}${separator}_t=${Date.now()}`;
+  }, [book.cover_url, placeholderTexture]);
 
   // Animate hover
   useFrame(() => {
