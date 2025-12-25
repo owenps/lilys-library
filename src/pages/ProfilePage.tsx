@@ -169,7 +169,7 @@ export function ProfilePage() {
             <div className="text-center p-4 rounded-lg bg-muted/50">
               <Clock className="h-6 w-6 mx-auto mb-2 text-orange-500" />
               <p className="text-2xl font-bold">{stats.wantToRead}</p>
-              <p className="text-xs text-muted-foreground">Want to Read</p>
+              <p className="text-xs text-muted-foreground">Collected</p>
             </div>
             <div className="text-center p-4 rounded-lg bg-muted/50">
               <Heart className="h-6 w-6 mx-auto mb-2 text-pink-500" />

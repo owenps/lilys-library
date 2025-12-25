@@ -326,7 +326,7 @@ export function AddBookPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="want_to_read">Want to Read</SelectItem>
+                    <SelectItem value="want_to_read">Collected</SelectItem>
                     <SelectItem value="reading">Currently Reading</SelectItem>
                     <SelectItem value="completed">Completed</SelectItem>
                     <SelectItem value="wishlist">Wishlist</SelectItem>

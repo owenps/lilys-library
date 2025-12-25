@@ -85,7 +85,7 @@ export function LibraryPage() {
               <SelectItem value="all">All Books ({statusCounts.all})</SelectItem>
               <SelectItem value="reading">Reading ({statusCounts.reading})</SelectItem>
               <SelectItem value="completed">Completed ({statusCounts.completed})</SelectItem>
-              <SelectItem value="want_to_read">Want to Read ({statusCounts.want_to_read})</SelectItem>
+              <SelectItem value="want_to_read">Collected ({statusCounts.want_to_read})</SelectItem>
             </SelectContent>
           </Select>
 

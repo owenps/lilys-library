@@ -84,7 +84,7 @@ const statusConfig: Record<
     className: "bg-green-500/10 text-green-500",
   },
   want_to_read: {
-    label: "Want to Read",
+    label: "Collected",
     icon: Clock,
     className: "bg-orange-500/10 text-orange-500",
   },
@@ -335,7 +335,7 @@ export function BookDetailPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="want_to_read">Want to Read</SelectItem>
+                <SelectItem value="want_to_read">Collected</SelectItem>
                 <SelectItem value="reading">Currently Reading</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="wishlist">Wishlist</SelectItem>

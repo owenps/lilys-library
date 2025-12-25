@@ -25,7 +25,7 @@ const statusConfig: Record<
     className: "bg-green-500/10 text-green-500",
   },
   want_to_read: {
-    label: "Want to Read",
+    label: "Collected",
     icon: Clock,
     className: "bg-orange-500/10 text-orange-500",
   },
