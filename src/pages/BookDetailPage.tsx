@@ -58,13 +58,19 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBook, useUpdateUserBook, useDeleteBook } from "@/hooks/useBooks";
-import { useNotes, useCreateNote, useDeleteNote, useUpdateNote } from "@/hooks/useNotes";
+import {
+  useNotes,
+  useCreateNote,
+  useDeleteNote,
+  useUpdateNote,
+} from "@/hooks/useNotes";
 import {
   useStartNewSession,
   useUpdateSession,
   useDeleteSession,
 } from "@/hooks/useReadingSessions";
 import { SpineColorPicker } from "@/components/books/SpineColorPicker";
+import { VocabularySection } from "@/components/books/VocabularySection";
 import { cn } from "@/lib/utils";
 import type { ReadingStatus, ReadingSession } from "@/types/database";
 import { toast } from "sonner";
@@ -118,7 +124,9 @@ export function BookDetailPage() {
   const [sessionEndDate, setSessionEndDate] = useState<Date | undefined>();
   const [sessionRating, setSessionRating] = useState(0);
   const [sessionReview, setSessionReview] = useState("");
-  const [expandedReviews, setExpandedReviews] = useState<Set<string>>(new Set());
+  const [expandedReviews, setExpandedReviews] = useState<Set<string>>(
+    new Set(),
+  );
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [editNoteContent, setEditNoteContent] = useState("");
   const [editNoteIsQuote, setEditNoteIsQuote] = useState(false);
@@ -201,7 +209,12 @@ export function BookDetailPage() {
     }
   };
 
-  const handleEditNote = (note: { id: string; content: string; is_quote: boolean; page_number?: number | null }) => {
+  const handleEditNote = (note: {
+    id: string;
+    content: string;
+    is_quote: boolean;
+    page_number?: number | null;
+  }) => {
     setEditingNoteId(note.id);
     setEditNoteContent(note.content);
     setEditNoteIsQuote(note.is_quote);
@@ -358,25 +371,27 @@ export function BookDetailPage() {
                     Delete
                   </Button>
                 </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-destructive">Delete Book</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to remove "{book.title}" from your
-                    library? This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={handleDeleteBook}
-                    className="border bg-background shadow-xs hover:bg-accent text-destructive hover:text-destructive"
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-destructive">
+                      Delete Book
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to remove "{book.title}" from your
+                      library? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteBook}
+                      className="border bg-background shadow-xs hover:bg-accent text-destructive hover:text-destructive"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>
@@ -391,7 +406,9 @@ export function BookDetailPage() {
             <h1 className="text-2xl font-bold tracking-tight">{book.title}</h1>
             <p className="text-base text-muted-foreground">
               {book.author}
-              {book.published_year && <span className="ml-2">· {book.published_year}</span>}
+              {book.published_year && (
+                <span className="ml-2">· {book.published_year}</span>
+              )}
             </p>
 
             <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-muted-foreground">
@@ -436,6 +453,7 @@ export function BookDetailPage() {
             <TabsList>
               <TabsTrigger value="diary">Diary</TabsTrigger>
               <TabsTrigger value="notes">Notes & Quotes</TabsTrigger>
+              <TabsTrigger value="vocabulary">Vocabulary</TabsTrigger>
               <TabsTrigger value="display">Display</TabsTrigger>
             </TabsList>
 
@@ -449,7 +467,8 @@ export function BookDetailPage() {
                     <div className="space-y-2">
                       <Progress value={progress} />
                       <div className="text-sm text-muted-foreground text-center">
-                        {book.user_book?.current_page || 0} / {book.page_count} pages
+                        {book.user_book?.current_page || 0} / {book.page_count}{" "}
+                        pages
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -806,7 +825,6 @@ export function BookDetailPage() {
                   )}
                 </CardContent>
               </Card>
-
             </TabsContent>
 
             <TabsContent value="notes" className="space-y-4">
@@ -856,7 +874,11 @@ export function BookDetailPage() {
                       onChange={(e) => setNotePageNumber(e.target.value)}
                       className="flex-1"
                     />
-                    <Button size="icon" onClick={handleAddNote} disabled={!newNote.trim()}>
+                    <Button
+                      size="icon"
+                      onClick={handleAddNote}
+                      disabled={!newNote.trim()}
+                    >
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
@@ -875,7 +897,9 @@ export function BookDetailPage() {
                             <div className="space-y-3">
                               <div className="flex gap-4">
                                 <Button
-                                  variant={editNoteIsQuote ? "outline" : "secondary"}
+                                  variant={
+                                    editNoteIsQuote ? "outline" : "secondary"
+                                  }
                                   size="sm"
                                   onClick={() => setEditNoteIsQuote(false)}
                                   className="gap-2"
@@ -884,7 +908,9 @@ export function BookDetailPage() {
                                   Note
                                 </Button>
                                 <Button
-                                  variant={editNoteIsQuote ? "secondary" : "outline"}
+                                  variant={
+                                    editNoteIsQuote ? "secondary" : "outline"
+                                  }
                                   size="sm"
                                   onClick={() => setEditNoteIsQuote(true)}
                                   className="gap-2"
@@ -895,18 +921,24 @@ export function BookDetailPage() {
                               </div>
                               <Textarea
                                 value={editNoteContent}
-                                onChange={(e) => setEditNoteContent(e.target.value)}
+                                onChange={(e) =>
+                                  setEditNoteContent(e.target.value)
+                                }
                                 rows={3}
                               />
                               <div className="flex gap-2 items-end">
                                 <div className="space-y-2">
-                                  <Label htmlFor={`editPageNum-${note.id}`}>Page</Label>
+                                  <Label htmlFor={`editPageNum-${note.id}`}>
+                                    Page
+                                  </Label>
                                   <Input
                                     id={`editPageNum-${note.id}`}
                                     type="number"
                                     placeholder="#"
                                     value={editNotePageNumber}
-                                    onChange={(e) => setEditNotePageNumber(e.target.value)}
+                                    onChange={(e) =>
+                                      setEditNotePageNumber(e.target.value)
+                                    }
                                     className="w-24"
                                   />
                                 </div>
@@ -943,7 +975,7 @@ export function BookDetailPage() {
                                   <span>
                                     {format(
                                       new Date(note.created_at),
-                                      "MMM d, yyyy"
+                                      "MMM d, yyyy",
                                     )}
                                   </span>
                                 </div>
@@ -980,6 +1012,10 @@ export function BookDetailPage() {
                   No notes yet. Add your first note or quote above!
                 </p>
               )}
+            </TabsContent>
+
+            <TabsContent value="vocabulary" className="space-y-4">
+              <VocabularySection bookId={book.id} />
             </TabsContent>
 
             <TabsContent value="display" className="space-y-4">

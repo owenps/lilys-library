@@ -97,7 +97,8 @@ export function useBook(bookId: string | undefined) {
           user_book:user_books(*),
           collections:book_collections(collection:collections(*)),
           notes(*),
-          reading_sessions(*)
+          reading_sessions(*),
+          vocabulary(*)
         `)
         .eq('id', bookId)
         .eq('user_id', user.id)
@@ -116,6 +117,7 @@ export function useBook(bookId: string | undefined) {
         collections: data.collections?.map((bc: { collection: unknown }) => bc.collection) || [],
         notes: data.notes || [],
         reading_sessions: sessions,
+        vocabulary: data.vocabulary || [],
       }
     },
     enabled: !!user && !!bookId,

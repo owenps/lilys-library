@@ -14,6 +14,7 @@ import { CollectionsPage } from '@/pages/CollectionsPage'
 import { CollectionDetailPage } from '@/pages/CollectionDetailPage'
 import { WishlistPage } from '@/pages/WishlistPage'
 import { StatsPage } from '@/pages/StatsPage'
+import { VocabularyPage } from '@/pages/VocabularyPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 
 const queryClient = new QueryClient({
@@ -75,6 +76,7 @@ function AppRoutes() {
         <Route path="book/:id/edit" element={<EditBookPage />} />
         <Route path="collections" element={<CollectionsPage />} />
         <Route path="collections/:id" element={<CollectionDetailPage />} />
+        <Route path="vocabulary" element={<VocabularyPage />} />
         <Route path="stats" element={<StatsPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />

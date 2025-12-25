@@ -75,6 +75,20 @@ export interface Note {
   updated_at: string;
 }
 
+export interface Vocabulary {
+  id: string;
+  user_id: string;
+  book_id: string;
+  term: string;
+  definition: string;
+  part_of_speech?: string | null;
+  phonetic?: string | null;
+  example?: string | null;
+  page_number?: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -92,6 +106,7 @@ export interface BookWithDetails extends Book {
   collections?: Collection[];
   notes?: Note[];
   reading_sessions?: ReadingSession[];
+  vocabulary?: Vocabulary[];
 }
 
 export interface ReadingStats {

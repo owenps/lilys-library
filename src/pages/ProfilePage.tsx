@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Mail,
   Calendar,
@@ -7,6 +8,7 @@ import {
   Clock,
   Heart,
   Quote,
+  BarChart3,
 } from "lucide-react";
 import {
   Card,
@@ -145,9 +147,17 @@ export function ProfilePage() {
       )}
 
       <Card>
-        <CardHeader>
-          <CardTitle>Reading Summary</CardTitle>
-          <CardDescription>Your library at a glance</CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Reading Summary</CardTitle>
+            <CardDescription>Your library at a glance</CardDescription>
+          </div>
+          <Link to="/stats">
+            <Button variant="outline" size="sm" className="gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Detailed Stats
+            </Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">

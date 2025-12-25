@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { BookOpen, Library, BarChart3, Settings, LogOut, User, Heart } from 'lucide-react'
+import { BookOpen, Library, BookA, Settings, LogOut, User, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -16,7 +16,7 @@ const navItems = [
   { href: '/', label: 'Library', icon: BookOpen },
   { href: '/wishlist', label: 'Wishlist', icon: Heart },
   { href: '/collections', label: 'Collections', icon: Library },
-  { href: '/stats', label: 'Statistics', icon: BarChart3 },
+  { href: '/vocabulary', label: 'Vocabulary', icon: BookA },
 ]
 
 export function Header() {
