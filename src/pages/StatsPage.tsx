@@ -50,7 +50,7 @@ export function StatsPage() {
     const totalPages = completed.reduce((sum, book) => sum + (book.page_count || 0), 0)
 
     const ratings = completed
-      .map((b) => b.user_book?.rating)
+      .map((b) => b.reading_sessions?.find((s) => s.rating != null)?.rating)
       .filter((r): r is number => r != null)
     const avgRating = ratings.length > 0
       ? ratings.reduce((a, b) => a + b, 0) / ratings.length
@@ -215,7 +215,7 @@ export function StatsPage() {
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold truncate">
+            <div className="text-lg sm:text-2xl font-bold truncate">
               {stats.topAuthor?.name || '-'}
             </div>
             <p className="text-xs text-muted-foreground">
