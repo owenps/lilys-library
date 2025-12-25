@@ -7,9 +7,10 @@ import {
   Star,
   Edit,
   Trash2,
-  Plus,
   Clock,
   CheckCircle,
+  Check,
+  Plus,
   Heart,
   Calendar as CalendarIcon,
   FileText,
@@ -328,40 +329,9 @@ export function BookDetailPage() {
             )}
           </div>
 
-          {status === "reading" && book.page_count && (
-            <Card>
-              <CardContent className="pt-4 space-y-3">
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Progress</span>
-                    <span className="text-muted-foreground">
-                      {book.user_book?.current_page || 0} / {book.page_count}{" "}
-                      pages
-                    </span>
-                  </div>
-                  <Progress value={progress} />
-                </div>
-                <div className="flex gap-2">
-                  <Input
-                    type="number"
-                    placeholder="Page #"
-                    value={currentPage}
-                    onChange={(e) => setCurrentPage(e.target.value)}
-                    className="flex-1"
-                    min={0}
-                    max={book.page_count}
-                  />
-                  <Button size="sm" onClick={handleUpdateProgress}>
-                    Update
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
             <Select value={status} onValueChange={handleStatusChange}>
-              <SelectTrigger className="flex-1">
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -371,21 +341,23 @@ export function BookDetailPage() {
                 <SelectItem value="wishlist">Wishlist</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" asChild>
-              <Link to={`/book/${book.id}/edit`}>
-                <Edit className="h-4 w-4" />
-              </Link>
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </AlertDialogTrigger>
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1" asChild>
+                <Link to={`/book/${book.id}/edit`}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit
+                </Link>
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex-1 text-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                  </Button>
+                </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-destructive">Delete Book</AlertDialogTitle>
@@ -405,6 +377,7 @@ export function BookDetailPage() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            </div>
           </div>
         </div>
 
@@ -467,6 +440,35 @@ export function BookDetailPage() {
             </TabsList>
 
             <TabsContent value="diary" className="space-y-4">
+              {status === "reading" && book.page_count && (
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Progress</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-2">
+                      <Progress value={progress} />
+                      <div className="text-sm text-muted-foreground text-center">
+                        {book.user_book?.current_page || 0} / {book.page_count} pages
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Page"
+                        value={currentPage}
+                        onChange={(e) => setCurrentPage(e.target.value)}
+                        min={0}
+                        max={book.page_count}
+                        className="flex-1"
+                      />
+                      <Button size="icon" onClick={handleUpdateProgress}>
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
               <Card>
                 <CardHeader>
                   <CardTitle>Reading Diary</CardTitle>
@@ -815,7 +817,7 @@ export function BookDetailPage() {
                 <CardContent className="space-y-4">
                   <div className="flex gap-4">
                     <Button
-                      variant={isQuote ? "outline" : "secondary"}
+                      variant={isQuote ? "outline" : "default"}
                       size="sm"
                       onClick={() => setIsQuote(false)}
                       className="gap-2"
@@ -824,7 +826,7 @@ export function BookDetailPage() {
                       Note
                     </Button>
                     <Button
-                      variant={isQuote ? "secondary" : "outline"}
+                      variant={isQuote ? "default" : "outline"}
                       size="sm"
                       onClick={() => setIsQuote(true)}
                       className="gap-2"
@@ -845,21 +847,17 @@ export function BookDetailPage() {
                     rows={3}
                   />
 
-                  <div className="flex gap-2 items-end">
-                    <div className="space-y-2">
-                      <Label htmlFor="pageNum">Page (optional)</Label>
-                      <Input
-                        id="pageNum"
-                        type="number"
-                        placeholder="#"
-                        value={notePageNumber}
-                        onChange={(e) => setNotePageNumber(e.target.value)}
-                        className="w-24"
-                      />
-                    </div>
-                    <Button onClick={handleAddNote} disabled={!newNote.trim()}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add {isQuote ? "Quote" : "Note"}
+                  <div className="flex gap-2">
+                    <Input
+                      id="pageNum"
+                      type="number"
+                      placeholder="Page (optional)"
+                      value={notePageNumber}
+                      onChange={(e) => setNotePageNumber(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button size="icon" onClick={handleAddNote} disabled={!newNote.trim()}>
+                      <Plus className="h-4 w-4" />
                     </Button>
                   </div>
                 </CardContent>
