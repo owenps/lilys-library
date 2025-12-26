@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Search, Grid3X3, List, Filter, Users, BookOpen } from 'lucide-react'
+import { Plus, Search, Grid3X3, List, Filter, Users, BookOpen, AlignHorizontalJustifyStart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -14,10 +14,11 @@ import {
 import { BookList } from '@/components/books/BookList'
 import { BookshelfView } from '@/components/books/BookshelfView'
 import { AuthorsView } from '@/components/books/AuthorsView'
+import { SpineView } from '@/components/books/SpineView'
 import { useBooks } from '@/hooks/useBooks'
 import type { ReadingStatus } from '@/types/database'
 
-type ViewMode = 'list' | 'shelf' | 'authors'
+type ViewMode = 'list' | 'shelf' | 'authors' | 'spines'
 
 export function LibraryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('shelf')
@@ -46,7 +47,7 @@ export function LibraryPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">My Library</h1>
           <p className="text-muted-foreground">
@@ -54,7 +55,7 @@ export function LibraryPage() {
           </p>
         </div>
         <Link to="/add">
-          <Button className="gap-2">
+          <Button className="gap-2 mt-1">
             <Plus className="h-4 w-4" />
             Add Book
           </Button>
@@ -100,6 +101,9 @@ export function LibraryPage() {
               <TabsTrigger value="authors" className="px-3">
                 <Users className="h-4 w-4" />
               </TabsTrigger>
+              <TabsTrigger value="spines" className="px-3">
+                <AlignHorizontalJustifyStart className="h-4 w-4" />
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -129,6 +133,8 @@ export function LibraryPage() {
         </div>
       ) : viewMode === 'authors' ? (
         <AuthorsView books={filteredBooks} />
+      ) : viewMode === 'spines' ? (
+        <SpineView books={filteredBooks} />
       ) : viewMode === 'list' ? (
         <BookList books={filteredBooks} />
       ) : (

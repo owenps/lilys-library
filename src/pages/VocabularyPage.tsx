@@ -159,11 +159,12 @@ export function VocabularyPage() {
           )
         })
       ) : (
-        <div className="text-center py-12">
-          <BookOpen className="h-12 w-12 mx-auto text-muted-foreground/50" />
-          <p className="text-muted-foreground mt-4">
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <BookOpen className="h-12 w-12 text-muted-foreground/50 mb-4" />
+          <h3 className="text-lg font-medium">No vocabulary yet</h3>
+          <p className="text-muted-foreground mt-1">
             {vocabulary.length === 0
-              ? 'No vocabulary yet. Start adding words while reading!'
+              ? 'Start adding words while reading your books!'
               : 'No words match your search.'}
           </p>
         </div>
