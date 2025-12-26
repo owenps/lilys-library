@@ -131,6 +131,7 @@ export function BookDetailPage() {
   const [editNoteContent, setEditNoteContent] = useState("");
   const [editNoteIsQuote, setEditNoteIsQuote] = useState(false);
   const [editNotePageNumber, setEditNotePageNumber] = useState("");
+  const [noteFilter, setNoteFilter] = useState<"all" | "notes" | "quotes">("all");
 
   // Get sessions from book data
   const sessions = book?.reading_sessions || [];
@@ -886,8 +887,46 @@ export function BookDetailPage() {
               </Card>
 
               {notes.length > 0 && (
+                <div className="flex gap-2">
+                  <Button
+                    variant={noteFilter === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setNoteFilter("all")}
+                  >
+                    All
+                  </Button>
+                  <Button
+                    variant={noteFilter === "notes" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setNoteFilter("notes")}
+                    className="gap-2"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Notes
+                  </Button>
+                  <Button
+                    variant={noteFilter === "quotes" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setNoteFilter("quotes")}
+                    className="gap-2"
+                  >
+                    <Quote className="h-4 w-4" />
+                    Quotes
+                  </Button>
+                </div>
+              )}
+
+              {notes.filter((note) => {
+                if (noteFilter === "notes") return !note.is_quote;
+                if (noteFilter === "quotes") return note.is_quote;
+                return true;
+              }).length > 0 && (
                 <div className="space-y-3">
-                  {notes.map((note) => {
+                  {notes.filter((note) => {
+                    if (noteFilter === "notes") return !note.is_quote;
+                    if (noteFilter === "quotes") return note.is_quote;
+                    return true;
+                  }).map((note) => {
                     const isEditing = editingNoteId === note.id;
 
                     return (
@@ -962,11 +1001,11 @@ export function BookDetailPage() {
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1">
                                 {note.is_quote ? (
-                                  <blockquote className="border-l-2 border-primary pl-4 italic">
+                                  <blockquote className="border-l-2 border-primary pl-4 italic whitespace-pre-wrap">
                                     "{note.content}"
                                   </blockquote>
                                 ) : (
-                                  <p>{note.content}</p>
+                                  <p className="whitespace-pre-wrap">{note.content}</p>
                                 )}
                                 <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                                   {note.page_number && (
