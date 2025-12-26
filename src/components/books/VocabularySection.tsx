@@ -46,6 +46,7 @@ export function VocabularySection({ bookId }: VocabularySectionProps) {
   const [editTerm, setEditTerm] = useState('')
   const [editDefinition, setEditDefinition] = useState('')
   const [editPageNumber, setEditPageNumber] = useState('')
+  const [editPartOfSpeech, setEditPartOfSpeech] = useState('')
 
   // Dictionary lookup with debounce
   const [debouncedTerm, setDebouncedTerm] = useState('')
@@ -101,6 +102,7 @@ export function VocabularySection({ bookId }: VocabularySectionProps) {
     setEditTerm(item.term)
     setEditDefinition(item.definition)
     setEditPageNumber(item.page_number?.toString() || '')
+    setEditPartOfSpeech(item.part_of_speech || '')
   }
 
   const handleSaveEdit = async () => {
@@ -112,6 +114,7 @@ export function VocabularySection({ bookId }: VocabularySectionProps) {
         bookId,
         term: editTerm.trim(),
         definition: editDefinition.trim(),
+        partOfSpeech: editPartOfSpeech || undefined,
         pageNumber: editPageNumber ? parseInt(editPageNumber) : null,
       })
       setEditingId(null)
@@ -126,6 +129,7 @@ export function VocabularySection({ bookId }: VocabularySectionProps) {
     setEditTerm('')
     setEditDefinition('')
     setEditPageNumber('')
+    setEditPartOfSpeech('')
   }
 
   const handleDeleteVocabulary = async (id: string) => {
@@ -266,6 +270,24 @@ export function VocabularySection({ bookId }: VocabularySectionProps) {
                         rows={2}
                       />
                       <div className="flex gap-2">
+                        <Select
+                          value={editPartOfSpeech}
+                          onValueChange={setEditPartOfSpeech}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue placeholder="Part of speech" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="noun">noun</SelectItem>
+                            <SelectItem value="verb">verb</SelectItem>
+                            <SelectItem value="adjective">adjective</SelectItem>
+                            <SelectItem value="adverb">adverb</SelectItem>
+                            <SelectItem value="pronoun">pronoun</SelectItem>
+                            <SelectItem value="preposition">preposition</SelectItem>
+                            <SelectItem value="conjunction">conjunction</SelectItem>
+                            <SelectItem value="interjection">interjection</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <Input
                           type="number"
                           placeholder="Page"
@@ -273,6 +295,8 @@ export function VocabularySection({ bookId }: VocabularySectionProps) {
                           onChange={(e) => setEditPageNumber(e.target.value)}
                           className="w-24"
                         />
+                      </div>
+                      <div className="flex gap-2">
                         <Button
                           size="sm"
                           onClick={handleSaveEdit}
