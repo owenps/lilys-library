@@ -127,6 +127,7 @@ export function useBook(bookId: string | undefined) {
 interface CreateBookInput {
   title: string
   author: string
+  author_nationality?: string
   isbn?: string
   cover_url?: string
   spine_color?: string
@@ -225,6 +226,7 @@ interface UpdateBookInput {
   id: string
   title?: string
   author?: string
+  author_nationality?: string | null
   isbn?: string
   cover_url?: string
   spine_color?: string | null

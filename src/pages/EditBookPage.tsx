@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { useBook, useUpdateBook } from "@/hooks/useBooks";
 import { toast } from "sonner";
+import { CountrySelect } from "@/components/ui/country-select";
 
 export function EditBookPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +24,7 @@ export function EditBookPage() {
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [authorNationality, setAuthorNationality] = useState<string | undefined>();
   const [isbn, setIsbn] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
   const [pageCount, setPageCount] = useState("");
@@ -34,6 +36,7 @@ export function EditBookPage() {
     if (book) {
       setTitle(book.title);
       setAuthor(book.author);
+      setAuthorNationality(book.author_nationality || undefined);
       setIsbn(book.isbn || "");
       setCoverUrl(book.cover_url || "");
       setPageCount(book.page_count?.toString() || "");
@@ -58,6 +61,7 @@ export function EditBookPage() {
         id,
         title: title.trim(),
         author: author.trim(),
+        author_nationality: authorNationality || null,
         isbn: isbn.trim() || undefined,
         cover_url: coverUrl.trim() || undefined,
         page_count: pageCount ? parseInt(pageCount) : undefined,
@@ -138,6 +142,15 @@ export function EditBookPage() {
                   required
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Author's Country</Label>
+              <CountrySelect
+                value={authorNationality}
+                onChange={setAuthorNationality}
+                placeholder="Select author's country..."
+              />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">

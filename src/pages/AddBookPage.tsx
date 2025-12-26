@@ -25,6 +25,7 @@ import { useCreateBook } from '@/hooks/useBooks'
 import { searchBooks, getBookByISBN, type BookSearchResult } from '@/lib/open-library'
 import type { ReadingStatus } from '@/types/database'
 import { toast } from 'sonner'
+import { CountrySelect } from '@/components/ui/country-select'
 
 export function AddBookPage() {
   const navigate = useNavigate()
@@ -42,6 +43,7 @@ export function AddBookPage() {
   // Manual form state
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
+  const [authorNationality, setAuthorNationality] = useState<string | undefined>()
   const [isbn, setIsbn] = useState('')
   const [coverUrl, setCoverUrl] = useState('')
   const [pageCount, setPageCount] = useState('')
@@ -90,6 +92,7 @@ export function AddBookPage() {
   const handleSelectBook = (book: BookSearchResult) => {
     setTitle(book.title)
     setAuthor(book.author)
+    setAuthorNationality(undefined)
     setIsbn(book.isbn || '')
     setCoverUrl(book.coverUrl || '')
     setPageCount(book.pageCount?.toString() || '')
@@ -111,6 +114,7 @@ export function AddBookPage() {
       await createBook.mutateAsync({
         title: title.trim(),
         author: author.trim(),
+        author_nationality: authorNationality,
         isbn: isbn.trim() || undefined,
         cover_url: coverUrl.trim() || undefined,
         page_count: pageCount ? parseInt(pageCount) : undefined,
@@ -254,6 +258,15 @@ export function AddBookPage() {
                     required
                   />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Author's Country</Label>
+                <CountrySelect
+                  value={authorNationality}
+                  onChange={setAuthorNationality}
+                  placeholder="Select author's country..."
+                />
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">

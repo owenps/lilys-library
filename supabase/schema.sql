@@ -10,6 +10,7 @@ create table if not exists books (
   user_id uuid references auth.users(id) on delete cascade not null,
   title text not null,
   author text not null,
+  author_nationality text, -- ISO 3166-1 alpha-2 country code
   isbn text,
   cover_url text,
   page_count integer,

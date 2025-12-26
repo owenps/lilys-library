@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ChevronDown, ChevronUp, Star, BookOpen, CheckCircle, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { CountryFlag } from '@/components/ui/country-flag'
 import type { BookWithDetails } from '@/types/database'
 
 interface AuthorCardProps {
@@ -18,6 +19,7 @@ export function AuthorCard({ author, books, isExpanded, onToggle }: AuthorCardPr
   const avgRating = ratings.length > 0
     ? ratings.reduce((a, b) => a + b, 0) / ratings.length
     : null
+  const nationality = books.find((b) => b.author_nationality)?.author_nationality
 
   return (
     <div className="rounded-lg border-2 border-transparent bg-card hover:border-primary/30 transition-colors">
@@ -30,6 +32,9 @@ export function AuthorCard({ author, books, isExpanded, onToggle }: AuthorCardPr
             {author}
           </h3>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            {nationality && (
+              <CountryFlag code={nationality} className="h-3 w-4" />
+            )}
             <span className="flex items-center gap-1">
               <BookOpen className="h-3 w-3" />
               {books.length}

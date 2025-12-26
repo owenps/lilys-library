@@ -5,6 +5,7 @@ export interface Book {
   user_id: string;
   title: string;
   author: string;
+  author_nationality?: string | null;
   isbn?: string | null;
   cover_url?: string | null;
   spine_color?: string | null;
