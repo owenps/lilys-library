@@ -331,7 +331,7 @@ export function BookDetailPage() {
       <div className="grid gap-6 md:grid-cols-[300px_1fr]">
         {/* Book Cover & Quick Actions */}
         <div className="space-y-4 max-w-[200px] mx-auto md:max-w-none md:mx-0">
-          <div className="aspect-[2/3] rounded-lg overflow-hidden bg-muted shadow-lg">
+          <div className="aspect-2/3 rounded-lg overflow-hidden bg-muted shadow-lg">
             {book.cover_url ? (
               <img
                 src={book.cover_url}
@@ -339,7 +339,7 @@ export function BookDetailPage() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
+              <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-primary/20 to-primary/5">
                 <BookOpen className="h-16 w-16 text-primary/40" />
               </div>
             )}
