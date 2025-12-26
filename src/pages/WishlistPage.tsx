@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Search, Grid3X3, List, Heart } from 'lucide-react'
+import { Plus, Search, Grid3X3, List, Heart, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BookList } from '@/components/books/BookList'
 import { BookshelfView } from '@/components/books/BookshelfView'
+import { AuthorsView } from '@/components/books/AuthorsView'
 import { useWishlistBooks } from '@/hooks/useBooks'
 
-type ViewMode = 'list' | 'shelf'
+type ViewMode = 'list' | 'shelf' | 'authors'
 
 export function WishlistPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('shelf')
@@ -60,6 +61,9 @@ export function WishlistPage() {
             <TabsTrigger value="list" className="px-3">
               <List className="h-4 w-4" />
             </TabsTrigger>
+            <TabsTrigger value="authors" className="px-3">
+              <Users className="h-4 w-4" />
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -86,6 +90,8 @@ export function WishlistPage() {
             </Link>
           )}
         </div>
+      ) : viewMode === 'authors' ? (
+        <AuthorsView books={filteredBooks} />
       ) : viewMode === 'list' ? (
         <BookList books={filteredBooks} />
       ) : (
