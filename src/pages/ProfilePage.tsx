@@ -148,7 +148,7 @@ export function ProfilePage() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <div>
+          <div className="space-y-1.5">
             <CardTitle>Reading Summary</CardTitle>
             <CardDescription>Your library at a glance</CardDescription>
           </div>
