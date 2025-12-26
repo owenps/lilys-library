@@ -21,6 +21,19 @@ export function VocabularyPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterBook, setFilterBook] = useState<string>('all')
   const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent')
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
+
+  const toggleExpanded = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
+  }
 
   const filteredVocabulary = useMemo(() => {
     let result = [...vocabulary]
@@ -133,26 +146,33 @@ export function VocabularyPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {words.map((item) => (
-                    <div key={item.id} className="p-3 border rounded-lg">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium">{item.term}</span>
-                        {item.part_of_speech && (
-                          <Badge variant="outline" className="text-xs">
-                            {item.part_of_speech}
-                          </Badge>
+                  {words.map((item) => {
+                    const isExpanded = expandedIds.has(item.id)
+                    return (
+                      <div
+                        key={item.id}
+                        className="p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => toggleExpanded(item.id)}
+                      >
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-medium">{item.term}</span>
+                          {item.part_of_speech && (
+                            <Badge variant="outline" className="text-xs">
+                              {item.part_of_speech}
+                            </Badge>
+                          )}
+                        </div>
+                        <p className={`text-sm text-muted-foreground mt-1 ${isExpanded ? '' : 'line-clamp-2'}`}>
+                          {item.definition}
+                        </p>
+                        {item.page_number && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Page {item.page_number}
+                          </p>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                        {item.definition}
-                      </p>
-                      {item.page_number && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Page {item.page_number}
-                        </p>
-                      )}
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </CardContent>
             </Card>
