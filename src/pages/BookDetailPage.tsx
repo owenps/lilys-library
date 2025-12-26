@@ -131,7 +131,9 @@ export function BookDetailPage() {
   const [editNoteContent, setEditNoteContent] = useState("");
   const [editNoteIsQuote, setEditNoteIsQuote] = useState(false);
   const [editNotePageNumber, setEditNotePageNumber] = useState("");
-  const [noteFilter, setNoteFilter] = useState<"all" | "notes" | "quotes">("all");
+  const [noteFilter, setNoteFilter] = useState<"all" | "notes" | "quotes">(
+    "all",
+  );
 
   // Get sessions from book data
   const sessions = book?.reading_sessions || [];
@@ -916,135 +918,151 @@ export function BookDetailPage() {
                 </div>
               )}
 
-              {notes.filter((note) => {
-                if (noteFilter === "notes") return !note.is_quote;
-                if (noteFilter === "quotes") return note.is_quote;
-                return true;
-              }).length > 0 && (
-                <div className="space-y-3">
-                  {notes.filter((note) => {
-                    if (noteFilter === "notes") return !note.is_quote;
-                    if (noteFilter === "quotes") return note.is_quote;
-                    return true;
-                  }).map((note) => {
-                    const isEditing = editingNoteId === note.id;
+              {(() => {
+                const filteredNotes = notes.filter((note) => {
+                  if (noteFilter === "notes") return !note.is_quote;
+                  if (noteFilter === "quotes") return note.is_quote;
+                  return true;
+                });
 
-                    return (
-                      <Card key={note.id}>
-                        <CardContent className="pt-4">
-                          {isEditing ? (
-                            <div className="space-y-3">
-                              <div className="flex gap-4">
-                                <Button
-                                  variant={
-                                    editNoteIsQuote ? "outline" : "secondary"
-                                  }
-                                  size="sm"
-                                  onClick={() => setEditNoteIsQuote(false)}
-                                  className="gap-2"
-                                >
-                                  <FileText className="h-4 w-4" />
-                                  Note
-                                </Button>
-                                <Button
-                                  variant={
-                                    editNoteIsQuote ? "secondary" : "outline"
-                                  }
-                                  size="sm"
-                                  onClick={() => setEditNoteIsQuote(true)}
-                                  className="gap-2"
-                                >
-                                  <Quote className="h-4 w-4" />
-                                  Quote
-                                </Button>
-                              </div>
-                              <Textarea
-                                value={editNoteContent}
-                                onChange={(e) =>
-                                  setEditNoteContent(e.target.value)
-                                }
-                                rows={3}
-                              />
-                              <div className="flex gap-2 items-end">
-                                <div className="space-y-2">
-                                  <Label htmlFor={`editPageNum-${note.id}`}>
-                                    Page
-                                  </Label>
-                                  <Input
-                                    id={`editPageNum-${note.id}`}
-                                    type="number"
-                                    placeholder="#"
-                                    value={editNotePageNumber}
-                                    onChange={(e) =>
-                                      setEditNotePageNumber(e.target.value)
+                if (filteredNotes.length === 0 && notes.length > 0) {
+                  return (
+                    <p className="text-center text-muted-foreground py-8">
+                      {noteFilter === "notes"
+                        ? "No notes yet!"
+                        : "No quotes yet!"}
+                    </p>
+                  );
+                }
+
+                if (filteredNotes.length === 0) return null;
+
+                return (
+                  <div className="space-y-3">
+                    {filteredNotes.map((note) => {
+                      const isEditing = editingNoteId === note.id;
+
+                      return (
+                        <Card key={note.id}>
+                          <CardContent className="pt-4">
+                            {isEditing ? (
+                              <div className="space-y-3">
+                                <div className="flex gap-4">
+                                  <Button
+                                    variant={
+                                      editNoteIsQuote ? "outline" : "secondary"
                                     }
-                                    className="w-24"
-                                  />
+                                    size="sm"
+                                    onClick={() => setEditNoteIsQuote(false)}
+                                    className="gap-2"
+                                  >
+                                    <FileText className="h-4 w-4" />
+                                    Note
+                                  </Button>
+                                  <Button
+                                    variant={
+                                      editNoteIsQuote ? "secondary" : "outline"
+                                    }
+                                    size="sm"
+                                    onClick={() => setEditNoteIsQuote(true)}
+                                    className="gap-2"
+                                  >
+                                    <Quote className="h-4 w-4" />
+                                    Quote
+                                  </Button>
                                 </div>
-                                <Button
-                                  size="sm"
-                                  onClick={handleSaveNote}
-                                  disabled={updateNote.isPending}
-                                >
-                                  {updateNote.isPending ? "Saving..." : "Save"}
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={handleCancelEditNote}
-                                >
-                                  Cancel
-                                </Button>
+                                <Textarea
+                                  value={editNoteContent}
+                                  onChange={(e) =>
+                                    setEditNoteContent(e.target.value)
+                                  }
+                                  rows={3}
+                                />
+                                <div className="flex gap-2 items-end">
+                                  <div className="space-y-2">
+                                    <Label htmlFor={`editPageNum-${note.id}`}>
+                                      Page
+                                    </Label>
+                                    <Input
+                                      id={`editPageNum-${note.id}`}
+                                      type="number"
+                                      placeholder="#"
+                                      value={editNotePageNumber}
+                                      onChange={(e) =>
+                                        setEditNotePageNumber(e.target.value)
+                                      }
+                                      className="w-24"
+                                    />
+                                  </div>
+                                  <Button
+                                    size="sm"
+                                    onClick={handleSaveNote}
+                                    disabled={updateNote.isPending}
+                                  >
+                                    {updateNote.isPending
+                                      ? "Saving..."
+                                      : "Save"}
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleCancelEditNote}
+                                  >
+                                    Cancel
+                                  </Button>
+                                </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1">
-                                {note.is_quote ? (
-                                  <blockquote className="border-l-2 border-primary pl-4 italic whitespace-pre-wrap">
-                                    "{note.content}"
-                                  </blockquote>
-                                ) : (
-                                  <p className="whitespace-pre-wrap">{note.content}</p>
-                                )}
-                                <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                                  {note.page_number && (
-                                    <span>Page {note.page_number}</span>
+                            ) : (
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  {note.is_quote ? (
+                                    <blockquote className="border-l-2 border-primary pl-4 italic whitespace-pre-wrap">
+                                      "{note.content}"
+                                    </blockquote>
+                                  ) : (
+                                    <p className="whitespace-pre-wrap">
+                                      {note.content}
+                                    </p>
                                   )}
-                                  <span>
-                                    {format(
-                                      new Date(note.created_at),
-                                      "MMM d, yyyy",
+                                  <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                                    {note.page_number && (
+                                      <span>Page {note.page_number}</span>
                                     )}
-                                  </span>
+                                    <span>
+                                      {format(
+                                        new Date(note.created_at),
+                                        "MMM d, yyyy",
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleEditNote(note)}
+                                    className="text-muted-foreground"
+                                  >
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => deleteNote.mutate(note.id)}
+                                    className="text-muted-foreground hover:text-destructive"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
                                 </div>
                               </div>
-                              <div className="flex gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleEditNote(note)}
-                                  className="text-muted-foreground"
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => deleteNote.mutate(note.id)}
-                                  className="text-muted-foreground hover:text-destructive"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
+                            )}
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
 
               {notes.length === 0 && (
                 <p className="text-center text-muted-foreground py-8">
